@@ -1,0 +1,13 @@
+name = "MallocDeques"
+uuid = "7320cb1d-dff1-46c7-b20b-20d123a174f7"
+authors = ["Hugo Levy-Falk <hugo@klafyvel.me> and contributors"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
