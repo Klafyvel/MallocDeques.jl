@@ -3,6 +3,9 @@ uuid = "7320cb1d-dff1-46c7-b20b-20d123a174f7"
 authors = ["Hugo Levy-Falk <hugo@klafyvel.me> and contributors"]
 version = "0.1.0"
 
+[deps]
+StaticTools = "86c06d3c-3f03-46de-9781-57580aa96d0a"
+
 [compat]
 julia = "1"
 
