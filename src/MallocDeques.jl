@@ -1,12 +1,11 @@
 """
-    using MallocDeque
-
 A StaticTools.jl and StaticCompilation.jl friendly double-ended queue implementation
 based on [DataStructures.jl](https://github.com/JuliaCollections/DataStructures.jl).
 
 It implements only a small subset of DataStructures.jl's Deque.
 
-```jldoctest
+```
+julia> using MallocDeques
 julia> a = MallocDeque{Int}()
 MallocDeque with 0 elements.
 julia> isempty(a)
@@ -116,11 +115,11 @@ mutable struct MallocDeque{T,C}
 
 end
 MallocDeque(::Type{T}, C) where T = MallocDeque{T,C}()
-function MallocDeque{T, C}() where {T,C}
+@inline function MallocDeque{T, C}() where {T,C}
     h = rear_deque_block(T,C)
     MallocDeque{T, C}(1, 0, h, h)
 end
-MallocDeque{T}() where {T} = MallocDeque{T,DEFAULT_DEQUEUE_BLOCKSIZE}()
+MallocDeque{T}() where {T} = MallocDeque{T,DEFAULT_DEQUEUE_BLOCKSIZE}()::MallocDeque{T,DEFAULT_DEQUEUE_BLOCKSIZE}
 
 """
     isempty(d::MallocDeque)
@@ -193,7 +192,7 @@ end
     empty!(d::MallocDeque)
 Reset the deque `d`.
 """
-function Base.empty!(d::MallocDeque)
+@inline function Base.empty!(d::MallocDeque)
     # release all blocks except the head
     if d.nblocks > 1
         blk = d.rear
@@ -220,7 +219,7 @@ end
     push!(d::MallocDeque{T,C}, x::T) where {T,C}
 Add an element to the back of deque `d`.
 """
-function Base.push!(d::MallocDeque{T,C}, x::T) where {T,C}
+@inline function Base.push!(d::MallocDeque{T,C}, x::T) where {T,C}
     if isempty(d.rear)
         front!(d.rear, 1)
         back!(d.rear, 0)
@@ -247,7 +246,7 @@ end
     pushfirst!(d::MallocDeque{T,C}, x::T) where {T,C}
 Add an element to the front of deque `d`.
 """
-function Base.pushfirst!(d::MallocDeque{T,C}, x::T) where {T,C}
+@inline function Base.pushfirst!(d::MallocDeque{T,C}, x::T) where {T,C}
     if isempty(d.head)
         front!(d.head, C + 1)
         back!(d.head, C)
@@ -275,7 +274,7 @@ end
 Remove the element at the back of deque `d`. Since throwing errors is not
 allowed, poping an empty deque will result in pain and suffering.
 """
-function Base.pop!(d::MallocDeque{T,C}) where {T,C}
+@inline function Base.pop!(d::MallocDeque{T,C}) where {T,C}
     # @assert back(d.rear) >= front(d.rear)
 
     x = data(T, d.rear, back(d.rear))
@@ -300,7 +299,7 @@ Remove the element at the front of deque `d`. Since throwing errors is not
 allowed, poping an empty deque will result in pain and suffering.
 
 """
-function Base.popfirst!(d::MallocDeque{T,C}) where {T,C}
+@inline function Base.popfirst!(d::MallocDeque{T,C}) where {T,C}
     # @assert back(d.head) >= front(d.head)
 
     x = data(T, d.head, front(d.head))

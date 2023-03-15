@@ -1,0 +1,3 @@
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+MallocDeques = "7320cb1d-dff1-46c7-b20b-20d123a174f7"
